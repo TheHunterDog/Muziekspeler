@@ -118,22 +118,15 @@ void prevSong()
 
 void playsong(int song[][2])
 {
-    int note = 0;
-    unsigned long oldtime = millis();
-    while (note != sizeof(song1))
+    for (int thisNote = 0; thisNote < 8; thisNote++)
     {
-        Serial.write(note);
-        int noteDuration = 1000 / song[note][1];
-        
+
+        int noteDuration = 1000 / song[thisNote][1];
+        tone(PezioDigital, song[thisNote][0], noteDuration);
         int pauseBetweenNotes = noteDuration * 1.30;
-        if((oldtime - millis()) > pauseBetweenNotes){
-            oldtime = millis();
-            noTone(PezioDigital); 
-          	note++;
-            tone(PezioDigital, song[note][0], noteDuration);
-        }
+        delay(pauseBetweenNotes);
+        stopSong();
     }
-    
 }
 void stopSong(){
     noTone(PezioDigital); 
@@ -141,7 +134,6 @@ void stopSong(){
 
 void setup()
 {
-    Serial.begin(9600);
     playsong(song1);
 }
 unsigned long oldtime = millis();

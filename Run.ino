@@ -118,22 +118,77 @@ void prevSong()
 
 void playsong(int song[][2])
 {
-    for (int thisNote = 0; thisNote < 8; thisNote++)
+    int note = 0;
+    bool noteChange = true;
+    unsigned long time = millis();
+    while (note < 8)
     {
-
-        int noteDuration = 1000 / song[thisNote][1];
-        tone(PezioDigital, song[thisNote][0], noteDuration);
+        int noteDuration = 1000 / song[note][1];
         int pauseBetweenNotes = noteDuration * 1.30;
-        delay(pauseBetweenNotes);
-        stopSong();
+
+        if (noteChange)
+        {
+            tone(PezioDigital, song[note][0], noteDuration);
+            noteChange = false;
+        }
+        if (millis() - time >= pauseBetweenNotes)
+        {
+            noteChange = true;
+            time = millis();
+            stopSong();
+            note++;
+        }
     }
 }
-void stopSong(){
-    noTone(PezioDigital); 
+// void playsong(int song[][2])
+// {
+//     int note = 0;
+//     int noteM = 0;
+//     unsigned long oldtime = millis();
+//     int noteDuration = 1000 / song[note][1];
+//     int pauseBetweenNotes = noteDuration * 1.30;
+//     tone(PezioDigital, song[note][0], noteDuration);
+//     Serial.println(sizeof(song));
+//     while (note != 8)
+//     {
+
+//         int noteDuration = 1000 / song[note][1];
+//         int pauseBetweenNotes = noteDuration * 1.30;
+//         Serial.print(pauseBetweenNotes);
+//         if ((millis() - oldtime) >= pauseBetweenNotes)
+//         {
+//             note += 1;
+//             Serial.print("next");
+//             oldtime = millis();
+//             noTone(PezioDigital);
+//             tone(PezioDigital, song[note][0], noteDuration);
+
+//         }
+//     }
+// }
+// unsigned long lastPeriodStart;
+// const int onDuration=1000;
+// const int periodDuration=6000;
+// void playsong(int song[][2])
+// {
+//     for (int thisNote = 0; thisNote < 8; thisNote++)
+//     {
+//         if (millis() - lastPeriodStart >= periodDuration)
+//         {
+//             lastPeriodStart += periodDuration;
+//             tone(PezioDigital, 550, onDuration); // play 550 Hz tone in background for 'onDuration'
+//         }
+//     }
+// }
+
+void stopSong()
+{
+    noTone(PezioDigital);
 }
 
 void setup()
 {
+    Serial.begin(9600);
     playsong(song1);
 }
 unsigned long oldtime = millis();
@@ -153,7 +208,6 @@ void loop()
             prevSong();
             stopSong();
             playsong(song1);
-
         }
     }
 }

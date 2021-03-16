@@ -87,18 +87,408 @@
 #define NOTE_CS8 4435
 #define NOTE_D8 4699
 #define NOTE_DS8 4978
+#define REST 0
 
 #define PezioDigital 13
 
 #define NEXTSONGBUTT 12
 #define PREVSONGBUTT 11
+#define LDR A1
+#define OFFLED 9
+#define ONLED 10
+#define ldrTreshold 20
+#define SevenA 4
+#define SevenB 6
+#define SevenC 8
+#define SevenD 7
+#define SevenE 5
+#define SevenF 3
+#define SevenG 2
 
-int song1[][2] = {
-    {NOTE_C4, 4}, {NOTE_G3, 8}, {NOTE_G3, 8}, {NOTE_A3, 4}, {NOTE_G3, 4}, {0, 4}, {NOTE_B3, 4}, {NOTE_C4, 4}
+int song1[] = {
+
+    // At Doom's Gate (E1M1)
+    // Score available at https://musescore.com/pieridot/doom
+
+    NOTE_E2,
+    8,
+    NOTE_E2,
+    8,
+    NOTE_E3,
+    8,
+    NOTE_E2,
+    8,
+    NOTE_E2,
+    8,
+    NOTE_D3,
+    8,
+    NOTE_E2,
+    8,
+    NOTE_E2,
+    8, //1
+    NOTE_C3,
+    8,
+    NOTE_E2,
+    8,
+    NOTE_E2,
+    8,
+    NOTE_AS2,
+    8,
+    NOTE_E2,
+    8,
+    NOTE_E2,
+    8,
+    NOTE_B2,
+    8,
+    NOTE_C3,
+    8,
+    NOTE_E2,
+    8,
+    NOTE_E2,
+    8,
+    NOTE_E3,
+    8,
+    NOTE_E2,
+    8,
+    NOTE_E2,
+    8,
+    NOTE_D3,
+    8,
+    NOTE_E2,
+    8,
+    NOTE_E2,
+    8,
+    NOTE_C3,
+    8,
+    NOTE_E2,
+    8,
+    NOTE_E2,
+    8,
+    NOTE_AS2,
+    -2,
+
+    NOTE_E2,
+    8,
+    NOTE_E2,
+    8,
+    NOTE_E3,
+    8,
+    NOTE_E2,
+    8,
+    338
 
 };
+int song2[] = {
 
-int songNum = 0;
+    // Bloody Tears, from Castlevania II
+    // Arranged by Bobby Lee. THe flute part was used
+    // https://musescore.com/user/263171/scores/883296
+
+    //B-flat major Bb Eb
+    REST, 4, NOTE_G5, 4,
+    NOTE_A5, 4, NOTE_AS5, 4,
+    NOTE_A5, 4, NOTE_F5, 4,
+    NOTE_A5, 4, NOTE_G5, 4,
+    REST, 4, NOTE_G5, 4,
+    NOTE_A5, 4, NOTE_AS5, 4,
+    NOTE_C6, 4, NOTE_AS5, 4,
+
+    NOTE_A5, 4, NOTE_G5, 4, //8
+    338
+};
+
+int song3[] = {
+
+    // Pink Panther theme
+    // Score available at https://musescore.com/benedictsong/the-pink-panther
+    // Theme by Masato Nakamura, arranged by Teddy Mason
+
+    REST,
+    2,
+    REST,
+    4,
+    REST,
+    8,
+    NOTE_DS4,
+    8,
+    NOTE_E4,
+    -4,
+    REST,
+    8,
+    NOTE_FS4,
+    8,
+    NOTE_G4,
+    -4,
+    REST,
+    8,
+    NOTE_DS4,
+    8,
+    NOTE_E4,
+    -8,
+    NOTE_FS4,
+    8,
+    NOTE_G4,
+    -8,
+    NOTE_C5,
+    8,
+    NOTE_B4,
+    -8,
+    NOTE_E4,
+    8,
+    NOTE_G4,
+    -8,
+    NOTE_B4,
+    8,
+    NOTE_AS4,
+    2,
+    NOTE_A4,
+    -16,
+    NOTE_G4,
+    -16,
+    NOTE_E4,
+    -16,
+    NOTE_D4,
+    -16,
+    NOTE_E4,
+    2,
+    REST,
+    4,
+    REST,
+    8,
+    NOTE_DS4,
+    4,
+
+    NOTE_E4,
+    -4,
+    REST,
+    8,
+    NOTE_FS4,
+    8,
+    NOTE_G4,
+    -4,
+    REST,
+    8,
+    NOTE_DS4,
+    8,
+    NOTE_E4,
+    -8,
+    NOTE_FS4,
+    8,
+    NOTE_G4,
+    -8,
+    NOTE_C5,
+    8,
+    NOTE_B4,
+    -8,
+    NOTE_G4,
+    8,
+    NOTE_B4,
+    -8,
+    NOTE_E5,
+    8,
+    NOTE_DS5,
+    1,
+    NOTE_D5,
+    2,
+    REST,
+    4,
+    REST,
+    8,
+    NOTE_DS4,
+    8,
+    NOTE_E4,
+    -4,
+    REST,
+    8,
+    NOTE_FS4,
+    8,
+    NOTE_G4,
+    -4,
+    REST,
+    8,
+    NOTE_DS4,
+    8,
+    NOTE_E4,
+    -8,
+    NOTE_FS4,
+    8,
+    NOTE_G4,
+    -8,
+    NOTE_C5,
+    8,
+    NOTE_B4,
+    -8,
+    NOTE_E4,
+    8,
+    NOTE_G4,
+    -8,
+    NOTE_B4,
+    8,
+
+    NOTE_AS4,
+    2,
+    NOTE_A4,
+    -16,
+    NOTE_G4,
+    -16,
+    NOTE_E4,
+    -16,
+    NOTE_D4,
+    -16,
+    NOTE_E4,
+    -4,
+    REST,
+    4,
+    REST,
+    4,
+    NOTE_E5,
+    -8,
+    NOTE_D5,
+    8,
+    NOTE_B4,
+    -8,
+    NOTE_A4,
+    8,
+    NOTE_G4,
+    -8,
+    NOTE_E4,
+    -8,
+    NOTE_AS4,
+    16,
+    NOTE_A4,
+    -8,
+    NOTE_AS4,
+    16,
+    NOTE_A4,
+    -8,
+    NOTE_AS4,
+    16,
+    NOTE_A4,
+    -8,
+    NOTE_AS4,
+    16,
+    NOTE_A4,
+    -8,
+    NOTE_G4,
+    -16,
+    NOTE_E4,
+    -16,
+    NOTE_D4,
+    -16,
+    NOTE_E4,
+    16,
+    NOTE_E4,
+    16,
+    NOTE_E4,
+    2,
+338
+};
+
+int song4[] = {
+
+    //Based on the arrangement at https://www.flutetunes.com/tunes.php?id=169
+
+    NOTE_AS4, -2, NOTE_F4, 8, NOTE_F4, 8, NOTE_AS4, 8, //1
+    NOTE_GS4, 16, NOTE_FS4, 16, NOTE_GS4, -2,
+    NOTE_AS4, -2, NOTE_FS4, 8, NOTE_FS4, 8, NOTE_AS4, 8,
+    NOTE_A4, 16, NOTE_G4, 16, NOTE_A4, -2,
+    REST, 1,
+
+    NOTE_AS4, 4, NOTE_F4, -4, NOTE_AS4, 8, NOTE_AS4, 16, NOTE_C5, 16, NOTE_D5, 16, NOTE_DS5, 16, //7
+    NOTE_F5, 2, NOTE_F5, 8, NOTE_F5, 8, NOTE_F5, 8, NOTE_FS5, 16, NOTE_GS5, 16,
+    NOTE_AS5, -2, NOTE_AS5, 8, NOTE_AS5, 8, NOTE_GS5, 8, NOTE_FS5, 16,
+    NOTE_GS5, -8, NOTE_FS5, 16, NOTE_F5, 2, NOTE_F5, 4,
+
+    NOTE_DS5, -8, NOTE_F5, 16, NOTE_FS5, 2, NOTE_F5, 8, NOTE_DS5, 8, //11
+    NOTE_CS5, -8, NOTE_DS5, 16, NOTE_F5, 2, NOTE_DS5, 8, NOTE_CS5, 8,
+    NOTE_C5, -8, NOTE_D5, 16, NOTE_E5, 2, NOTE_G5, 8,
+    NOTE_F5, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 8, NOTE_F4, 16, NOTE_F4, 8,
+
+    NOTE_AS4, 4, NOTE_F4, -4, NOTE_AS4, 8, NOTE_AS4, 16, NOTE_C5, 16, NOTE_D5, 16, NOTE_DS5, 16, //15
+    NOTE_F5, 2, NOTE_F5, 8, NOTE_F5, 8, NOTE_F5, 8, NOTE_FS5, 16, NOTE_GS5, 16,
+    NOTE_AS5, -2, NOTE_CS6, 4,
+    NOTE_C6, 4, NOTE_A5, 2, NOTE_F5, 4,
+    NOTE_FS5, -2, NOTE_AS5, 4,
+    NOTE_A5, 4, NOTE_F5, 2, NOTE_F5, 4,
+
+    NOTE_FS5, -2, NOTE_AS5, 4,
+    NOTE_A5, 4, NOTE_F5, 2, NOTE_D5, 4,
+    NOTE_DS5, -2, NOTE_FS5, 4,
+    NOTE_F5, 4, NOTE_CS5, 2, NOTE_AS4, 4,
+    NOTE_C5, -8, NOTE_D5, 16, NOTE_E5, 2, NOTE_G5, 8,
+    NOTE_F5, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 8, NOTE_F4, 16, NOTE_F4, 8
+,338
+};
+int song5[] = {
+
+    // Keyboard cat
+    // Score available at https://musescore.com/user/142788/scores/147371
+
+    REST,
+    1,
+    REST,
+    1,
+    NOTE_C4,
+    4,
+    NOTE_E4,
+    4,
+    NOTE_G4,
+    4,
+    NOTE_E4,
+    4,
+    NOTE_C4,
+    4,
+    NOTE_E4,
+    8,
+    NOTE_G4,
+    -4,
+    NOTE_E4,
+    4,
+    NOTE_A3,
+    4,
+    NOTE_C4,
+    4,
+    NOTE_E4,
+    4,
+    NOTE_C4,
+    4,
+    NOTE_A3,
+    4,
+    NOTE_C4,
+    8,
+    NOTE_E4,
+    -4,
+    NOTE_C4,
+    4,
+    NOTE_G3,
+    4,
+    NOTE_B3,
+    4,
+    NOTE_D4,
+    4,
+    NOTE_B3,
+    4,
+    NOTE_G3,
+    4,
+    NOTE_B3,
+    8,
+    NOTE_D4,
+    -4,
+    NOTE_B3,
+    4,
+    338
+
+};
+int *songs[] = {
+    song1, song2, song3, song4, song5};
+int songsize[] = {
+    sizeof(song1) / sizeof(song1[0]),
+    sizeof(song2) / sizeof(song2[0]),
+    sizeof(song3) / sizeof(song3[0]),
+    sizeof(song4) / sizeof(song4[0]),
+    sizeof(song5) / sizeof(song5[0]),
+
+}; int songNum = 0;
 
 void nextSong()
 {
@@ -110,14 +500,13 @@ void nextSong()
 
 void prevSong()
 {
-  if (songNum != 0)
+  if (songNum != 1)
   {
     songNum--;
   }
 }
-
-void playsong(int song[][2])
-{
+int tempo = 160;
+int wholenote = (60000 * 4) / tempo;
   bool playing = true;
   int note = 0;
   int noteDuration;
@@ -127,32 +516,65 @@ void playsong(int song[][2])
   bool nexNote = true;
   int loopnex = 0;
   int loopnwe = 0;
+void resetvars(){
+   playing = true;
+   note = 0;
+   noteDuration;
+   pauseBetweenNotes;
+    newtime = millis();
+   oldtime;
+   nexNote = true;
+   loopnex = 0;
+   loopnwe = 0;
+}
+void playsong(int song[], int totalNotes)
+{
+  Serial.println(totalNotes);
+  bool playing = true;
+  int note = 0;
+  int noteDuration;
+  int pauseBetweenNotes;
+  unsigned long newtime = millis();
+  // unsigned long oldtime;
+  bool nexNote = true;
+  int loopnex = 0;
+  int loopnwe = 0;
   while (playing)
   {
     delay(10); // tinkercad
     newtime = millis();
     if (nexNote)
     {
-      Serial.println("calculation");
-      Serial.println(song[note][1]);
-      noteDuration = 1000 / song[note][1];
-      Serial.println(noteDuration);
+      if (song[note + 1] > 0)
+      {
+        // Serial.println("calculation");
+        // Serial.println(song[note][1]);
+        noteDuration = wholenote / song[note + 1];
+        // Serial.println(noteDuration);
 
-      pauseBetweenNotes = noteDuration * 1.3;
-      tone(PezioDigital, song[note][0], noteDuration);
+        pauseBetweenNotes = noteDuration * 0.9;
+      }
+      else
+      {
+        noteDuration = (wholenote) / abs(song[note + 1]);
+        noteDuration *= 1.5;
+      }
+      tone(PezioDigital, song[note], noteDuration);
       nexNote = false;
       loopnex++;
     }
     if (newtime - oldtime >= pauseBetweenNotes)
     {
-      Serial.println(newtime - oldtime);
-      Serial.println(pauseBetweenNotes);
-      Serial.print("val");
+      //   Serial.println(newtime - oldtime);
+      //   Serial.println(pauseBetweenNotes);
+      //   Serial.print("val");
       stopSong();
       oldtime = newtime;
-      note++;
+      note += 2;
       nexNote = true;
-      if (note == 8)
+      Serial.println(totalNotes * 2);
+      Serial.println(note);
+      if (note > totalNotes * 2 || song[note] == 338)
       {
         playing = false;
       }
@@ -177,32 +599,136 @@ void stopSong()
   noTone(PezioDigital);
 }
 
-void setup()
+void printNumber(int number[], int size, bool state)
 {
 
+  for (int i = 0; i < size; i++)
+  {
+    digitalWrite(number[i], state);
+  }
+}
+int numbers[][7] = {
+    {SevenA, SevenB, SevenC, SevenD, SevenE, SevenF}, {SevenF, SevenE}, {SevenA, SevenB, SevenG, SevenE, SevenD}, {SevenA, SevenB, SevenG, SevenC, SevenD}, {SevenF, SevenG, SevenB, SevenC}, {SevenA, SevenF, SevenG, SevenC, SevenD}};
+
+void setup()
+{
   Serial.begin(9600);
   pinMode(PezioDigital, OUTPUT);
   pinMode(NEXTSONGBUTT, INPUT);
   pinMode(PREVSONGBUTT, INPUT);
-  playsong(song1);
-}
-unsigned long oldtime = millis();
+  pinMode(ONLED, OUTPUT);
+  pinMode(OFFLED, OUTPUT);
+  pinMode(SevenA, OUTPUT);
+  pinMode(SevenB, OUTPUT);
+  pinMode(SevenC, OUTPUT);
+  pinMode(SevenD, OUTPUT);
+  pinMode(SevenE, OUTPUT);
+  pinMode(SevenF, OUTPUT);
+  pinMode(SevenG, OUTPUT);
 
+  // playsong(song1);
+}
+// unsigned long oldtime = millis();
+bool press = false;
+int size;
 void loop()
-{
-  if ((oldtime - millis()) > 1000)
+{ // read the input pin
+  int ldrVal = analogRead(LDR);
+  Serial.println(ldrVal); // debug value
+  if (ldrVal >= ldrTreshold)
   {
-    if (digitalRead(NEXTSONGBUTT))
+    digitalWrite(OFFLED, false);
+    digitalWrite(ONLED, true);
+
+    // if ((oldtime - millis()) > 320)
+    // {
+   //   
+          newtime = millis();
+    if (nexNote)
     {
-      nextSong();
-      stopSong();
-      playsong(song1);
+      if (songs[songNum][note + 1] > 0)
+      {
+        // Serial.println("calculation");
+        // Serial.println(song[note][1]);
+        noteDuration = wholenote / songs[songNum][note + 1];
+        // Serial.println(noteDuration);
+
+        pauseBetweenNotes = noteDuration * 0.9;
+      }
+      else
+      {
+        noteDuration = (wholenote) / abs(songs[songNum][note + 1]);
+        noteDuration *= 1.5;
+      }
+      tone(PezioDigital, songs[songNum][note], noteDuration);
+      nexNote = false;
+      loopnex++;
     }
-    else if (digitalRead(PREVSONGBUTT))
+    if (newtime - oldtime >= pauseBetweenNotes)
     {
-      prevSong();
+      //   Serial.println(newtime - oldtime);
+      //   Serial.println(pauseBetweenNotes);
+      //   Serial.print("val");
       stopSong();
-      playsong(song1);
+      oldtime = newtime;
+      note += 2;
+      nexNote = true;
+      if (note > songsize[songNum] * 2 || songs[songNum][note] == 338)
+      {
+        playing = false;
+      }
+      loopnwe++;
     }
+
+
+// 
+
+
+    if (!press)
+    {
+      if (digitalRead(NEXTSONGBUTT))
+      {
+        size = sizeof(numbers[songNum]) / sizeof(numbers[songNum][0]);
+        printNumber(numbers[songNum], size, false);
+
+        nextSong();
+        stopSong();
+        size = sizeof(numbers[songNum]) / sizeof(numbers[songNum][0]);
+
+        printNumber(numbers[songNum], size, true);
+        press = true;
+        resetvars();
+
+        // playsong(songs[songNum - 1], songsize[songNum - 1]);
+      }
+      else if (digitalRead(PREVSONGBUTT))
+      {
+        size = sizeof(numbers[songNum]) / sizeof(numbers[songNum][0]);
+
+        printNumber(numbers[songNum], size, false);
+
+        prevSong();
+        stopSong();
+        size = sizeof(numbers[songNum]) / sizeof(numbers[songNum][0]);
+
+        printNumber(numbers[songNum], size, true);
+
+        press = true;
+        resetvars();
+        // playsong(songs[songNum - 1], songsize[songNum - 1]);
+      }
+    }
+    else if (digitalRead(PREVSONGBUTT) == 0 && digitalRead(NEXTSONGBUTT) == 0)
+    {
+      press = false;
+      oldtime = millis();
+    }
+  }
+  // }
+  else
+  {
+    digitalWrite(OFFLED, true);
+    stopSong();
+    digitalWrite(ONLED, false);
   }
 }

@@ -129,6 +129,7 @@ void playsong(int song[][2])
   int loopnwe = 0;
   while (playing)
   {
+    delay(10); // tinkercad
     newtime = millis();
     if (nexNote)
     {
@@ -178,7 +179,11 @@ void stopSong()
 
 void setup()
 {
+
   Serial.begin(9600);
+  pinMode(PezioDigital, OUTPUT);
+  pinMode(NEXTSONGBUTT, INPUT);
+  pinMode(PREVSONGBUTT, INPUT);
   playsong(song1);
 }
 unsigned long oldtime = millis();

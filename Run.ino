@@ -102,112 +102,102 @@ int songNum = 0;
 
 void nextSong()
 {
-    if (songNum != 5)
-    {
-        songNum++;
-    }
+  if (songNum != 5)
+  {
+    songNum++;
+  }
 }
 
 void prevSong()
 {
-    if (songNum != 0)
-    {
-        songNum--;
-    }
+  if (songNum != 0)
+  {
+    songNum--;
+  }
 }
 
 void playsong(int song[][2])
 {
-    int note = 0;
-    bool noteChange = true;
-    unsigned long time = millis();
-    while (note < 8)
+  bool playing = true;
+  int note = 0;
+  int noteDuration;
+  int pauseBetweenNotes;
+  unsigned long newtime = millis();
+  unsigned long oldtime;
+  bool nexNote = true;
+  int loopnex = 0;
+  int loopnwe = 0;
+  while (playing)
+  {
+    newtime = millis();
+    if (nexNote)
     {
-        int noteDuration = 1000 / song[note][1];
-        int pauseBetweenNotes = noteDuration * 1.30;
+      Serial.println("calculation");
+      Serial.println(song[note][1]);
+      noteDuration = 1000 / song[note][1];
+      Serial.println(noteDuration);
 
-        if (noteChange)
-        {
-            tone(PezioDigital, song[note][0], noteDuration);
-            noteChange = false;
-        }
-        if (millis() - time >= pauseBetweenNotes)
-        {
-            noteChange = true;
-            time = millis();
-            stopSong();
-            note++;
-        }
+      pauseBetweenNotes = noteDuration * 1.3;
+      tone(PezioDigital, song[note][0], noteDuration);
+      nexNote = false;
+      loopnex++;
     }
+    if (newtime - oldtime >= pauseBetweenNotes)
+    {
+      Serial.println(newtime - oldtime);
+      Serial.println(pauseBetweenNotes);
+      Serial.print("val");
+      stopSong();
+      oldtime = newtime;
+      note++;
+      nexNote = true;
+      if (note == 8)
+      {
+        playing = false;
+      }
+      loopnwe++;
+    }
+  }
+  // Serial.print("loopnwe:");
+  // Serial.println(loopnwe);
+  // Serial.print("loopnex:");
+  // Serial.println(loopnex);
+  // for (int thisNote = 0; thisNote < 8; thisNote++)
+  // {
+  //     int noteDuration = 1000 / song[thisNote][1];
+  //     tone(PezioDigital, song[thisNote][0], noteDuration);
+  //     int pauseBetweenNotes = noteDuration * 1.30;
+  //     delay(pauseBetweenNotes);
+  //     stopSong();
+  // }
 }
-// void playsong(int song[][2])
-// {
-//     int note = 0;
-//     int noteM = 0;
-//     unsigned long oldtime = millis();
-//     int noteDuration = 1000 / song[note][1];
-//     int pauseBetweenNotes = noteDuration * 1.30;
-//     tone(PezioDigital, song[note][0], noteDuration);
-//     Serial.println(sizeof(song));
-//     while (note != 8)
-//     {
-
-//         int noteDuration = 1000 / song[note][1];
-//         int pauseBetweenNotes = noteDuration * 1.30;
-//         Serial.print(pauseBetweenNotes);
-//         if ((millis() - oldtime) >= pauseBetweenNotes)
-//         {
-//             note += 1;
-//             Serial.print("next");
-//             oldtime = millis();
-//             noTone(PezioDigital);
-//             tone(PezioDigital, song[note][0], noteDuration);
-
-//         }
-//     }
-// }
-// unsigned long lastPeriodStart;
-// const int onDuration=1000;
-// const int periodDuration=6000;
-// void playsong(int song[][2])
-// {
-//     for (int thisNote = 0; thisNote < 8; thisNote++)
-//     {
-//         if (millis() - lastPeriodStart >= periodDuration)
-//         {
-//             lastPeriodStart += periodDuration;
-//             tone(PezioDigital, 550, onDuration); // play 550 Hz tone in background for 'onDuration'
-//         }
-//     }
-// }
-
 void stopSong()
 {
-    noTone(PezioDigital);
+  noTone(PezioDigital);
 }
 
 void setup()
 {
-    Serial.begin(9600);
-    playsong(song1);
+  Serial.begin(9600);
+  playsong(song1);
 }
 unsigned long oldtime = millis();
 
 void loop()
 {
-    if ((oldtime - millis()) > 1000)
+  if ((oldtime - millis()) > 1000)
+  {
+    if (digitalRead(NEXTSONGBUTT))
     {
-        if (digitalRead(NEXTSONGBUTT))
-        {
-            nextSong();
-            stopSong();
-            playsong(song1);
-        }
-        else if (digitalRead(PREVSONGBUTT))
-        {
-            prevSong();
-            stopSong();
-            playsong(song1);
-        }
+      nextSong();
+      stopSong();
+      playsong(song1);
     }
+    else if (digitalRead(PREVSONGBUTT))
+    {
+      prevSong();
+      stopSong();
+      playsong(song1);
+    }
+  }
 }

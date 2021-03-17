@@ -1,3 +1,5 @@
+
+// Start define notes
 #define NOTE_B0 31
 #define NOTE_C1 33
 #define NOTE_CS1 35
@@ -88,9 +90,9 @@
 #define NOTE_D8 4699
 #define NOTE_DS8 4978
 #define REST 0
-
+// end define notes
+// Start define pins
 #define PezioDigital 13
-
 #define NEXTSONGBUTT 12
 #define PREVSONGBUTT 11
 #define LDR A1
@@ -105,7 +107,8 @@
 #define SevenE 5
 #define SevenF 3
 #define SevenG 2
-
+// end define pins
+// Start initialize songs
 int song1[] = {
 
     // At Doom's Gate (E1M1)
@@ -476,16 +479,10 @@ int song5[] = {
     338
 
 };
+// Stop initialize songs
 int *songs[] = {
     song1, song2, song3, song4, song5};
-int songsize[] = {
-    sizeof(song1) / sizeof(song1[0]),
-    sizeof(song2) / sizeof(song2[0]),
-    sizeof(song3) / sizeof(song3[0]),
-    sizeof(song4) / sizeof(song4[0]),
-    sizeof(song5) / sizeof(song5[0]),
 
-};
 int songNum = 0;
 
 void nextSong()
@@ -503,6 +500,13 @@ void prevSong()
     songNum--;
   }
 }
+
+void stopSong()
+{
+  noTone(PezioDigital);
+}
+
+// initialize vars with default values
 int tempo = 160;
 int wholenote = (60000 * 4) / tempo;
 bool playing = true;
@@ -512,8 +516,8 @@ int pauseBetweenNotes;
 unsigned long newtime = millis();
 unsigned long oldtime;
 bool nexNote = true;
-int loopnex = 0;
-int loopnwe = 0;
+bool press = false;
+
 void resetvars()
 {
   playing = true;
@@ -521,14 +525,7 @@ void resetvars()
   noteDuration;
   pauseBetweenNotes;
   newtime = millis();
-  oldtime;
   nexNote = true;
-  loopnex = 0;
-  loopnwe = 0;
-}
-void stopSong()
-{
-  noTone(PezioDigital);
 }
 
 void printNumber(int number[], int size, bool state)
@@ -539,13 +536,19 @@ void printNumber(int number[], int size, bool state)
     digitalWrite(number[i], state);
   }
 }
+// initialize all visible numbers for the seven segmentdisplay
 int numbers[][7] = {
-    {SevenA, SevenB, SevenC, SevenD, SevenE, SevenF}, {SevenF, SevenE}, {SevenA, SevenB, SevenG, SevenE, SevenD}, {SevenA, SevenB, SevenG, SevenC, SevenD}, {SevenF, SevenG, SevenB, SevenC}, {SevenA, SevenF, SevenG, SevenC, SevenD}};
+    {SevenA, SevenB, SevenC, SevenD, SevenE, SevenF}, // 0,
+    {SevenF, SevenE},                                 // 1,
+    {SevenA, SevenB, SevenG, SevenE, SevenD},         // 2,
+    {SevenA, SevenB, SevenG, SevenC, SevenD},         // 3,
+    {SevenF, SevenG, SevenB, SevenC},                 // 4,
+    {SevenA, SevenF, SevenG, SevenC, SevenD},         //5
+};
 int size;
 
 void setup()
 {
-  Serial.begin(9600);
   pinMode(PezioDigital, OUTPUT);
   pinMode(NEXTSONGBUTT, INPUT);
   pinMode(PREVSONGBUTT, INPUT);
@@ -559,79 +562,58 @@ void setup()
   pinMode(SevenF, OUTPUT);
   pinMode(SevenG, OUTPUT);
   pinMode(POT, INPUT);
-          size = sizeof(numbers[songNum]) / sizeof(numbers[songNum][0]);
-
-        printNumber(numbers[songNum], size, true);
-
-  // playsong(song1);
+  size = sizeof(numbers[songNum]) / sizeof(numbers[songNum][0]);
+  printNumber(numbers[songNum], size, true);
 }
-// unsigned long oldtime = millis();
-bool press = false;
+
 void loop()
-{ // read the input pin
-tempo = analogRead(POT);
-if (tempo < 160){
-  tempo = 160;
-}
-wholenote = (60000 * 4) / tempo;
-  int ldrVal = analogRead(LDR);
-  // Serial.println(ldrVal); // debug value
-  if (ldrVal >= ldrTreshold)
+{
+  tempo = analogRead(POT);
+  if (tempo < 160)
+  {
+    tempo = 160;
+  }
+  if (analogRead(LDR) >= ldrTreshold)
   {
     digitalWrite(OFFLED, false);
     digitalWrite(ONLED, true);
-
-    // if ((oldtime - millis()) > 320)
-    // {
-    //
     newtime = millis();
     if (playing)
     {
-      if (songNum == 0){
+      if (songNum == 0 && playing == true)
+      {
         playing = false;
       }
       if (nexNote)
       {
+        wholenote = (60000 * 4) / tempo;
         if (songs[songNum - 1][note + 1] > 0)
         {
-          // Serial.println("calculation");
-          // Serial.println(song[note][1]);
           noteDuration = wholenote / songs[songNum - 1][note + 1];
-          // Serial.println(noteDuration);
-
-          pauseBetweenNotes = noteDuration * 0.9;
         }
         else
         {
           noteDuration = (wholenote) / abs(songs[songNum - 1][note + 1]);
           noteDuration *= 1.5;
         }
+        pauseBetweenNotes = noteDuration * 0.9;
         tone(PezioDigital, songs[songNum - 1][note], noteDuration);
         nexNote = false;
-        loopnex++;
       }
       if (newtime - oldtime >= pauseBetweenNotes)
       {
-        //   Serial.println(newtime - oldtime);
-        //   Serial.println(pauseBetweenNotes);
-        //   Serial.print("val");
         stopSong();
         oldtime = newtime;
         note += 2;
         nexNote = true;
-        Serial.println(songs[songNum - 1][note]);
         if (songs[songNum - 1][note] == 338)
         {
           playing = false;
           nexNote = false;
-
           stopSong();
         }
-        loopnwe++;
       }
     }
-
-    //
 
     if (!press)
     {
@@ -639,32 +621,25 @@ wholenote = (60000 * 4) / tempo;
       {
         size = sizeof(numbers[songNum]) / sizeof(numbers[songNum][0]);
         printNumber(numbers[songNum], size, false);
-
         nextSong();
         stopSong();
-        size = sizeof(numbers[songNum]) / sizeof(numbers[songNum][0]);
 
+        size = sizeof(numbers[songNum]) / sizeof(numbers[songNum][0]);
         printNumber(numbers[songNum], size, true);
         press = true;
         resetvars();
-
-        // playsong(songs[songNum - 1], songsize[songNum - 1]);
       }
       else if (digitalRead(PREVSONGBUTT))
       {
         size = sizeof(numbers[songNum]) / sizeof(numbers[songNum][0]);
-
         printNumber(numbers[songNum], size, false);
-
         prevSong();
         stopSong();
+
         size = sizeof(numbers[songNum]) / sizeof(numbers[songNum][0]);
-
         printNumber(numbers[songNum], size, true);
-
         press = true;
         resetvars();
-        // playsong(songs[songNum - 1], songsize[songNum - 1]);
       }
     }
     else if (digitalRead(PREVSONGBUTT) == 0 && digitalRead(NEXTSONGBUTT) == 0)
@@ -673,7 +648,6 @@ wholenote = (60000 * 4) / tempo;
       oldtime = millis();
     }
   }
-  // }
   else
   {
     digitalWrite(OFFLED, true);

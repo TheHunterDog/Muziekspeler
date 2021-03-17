@@ -194,8 +194,7 @@ int song2[] = {
     NOTE_C6, 4, NOTE_AS5, 4,
 
     NOTE_A5, 4, NOTE_G5, 4, //8
-    338
-};
+    338};
 
 int song3[] = {
 
@@ -381,8 +380,7 @@ int song3[] = {
     16,
     NOTE_E4,
     2,
-338
-};
+    338};
 
 int song4[] = {
 
@@ -416,9 +414,7 @@ int song4[] = {
     NOTE_DS5, -2, NOTE_FS5, 4,
     NOTE_F5, 4, NOTE_CS5, 2, NOTE_AS4, 4,
     NOTE_C5, -8, NOTE_D5, 16, NOTE_E5, 2, NOTE_G5, 8,
-    NOTE_F5, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 8, NOTE_F4, 16, NOTE_F4, 8
-,338
-};
+    NOTE_F5, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 16, NOTE_F4, 8, NOTE_F4, 16, NOTE_F4, 8, 338};
 int song5[] = {
 
     // Keyboard cat
@@ -488,7 +484,8 @@ int songsize[] = {
     sizeof(song4) / sizeof(song4[0]),
     sizeof(song5) / sizeof(song5[0]),
 
-}; int songNum = 0;
+};
+int songNum = 0;
 
 void nextSong()
 {
@@ -500,32 +497,33 @@ void nextSong()
 
 void prevSong()
 {
-  if (songNum != 1)
+  if (songNum != 0)
   {
     songNum--;
   }
 }
 int tempo = 160;
 int wholenote = (60000 * 4) / tempo;
-  bool playing = true;
-  int note = 0;
-  int noteDuration;
-  int pauseBetweenNotes;
-  unsigned long newtime = millis();
-  unsigned long oldtime;
-  bool nexNote = true;
-  int loopnex = 0;
-  int loopnwe = 0;
-void resetvars(){
-   playing = true;
-   note = 0;
-   noteDuration;
-   pauseBetweenNotes;
-    newtime = millis();
-   oldtime;
-   nexNote = true;
-   loopnex = 0;
-   loopnwe = 0;
+bool playing = true;
+int note = 0;
+int noteDuration;
+int pauseBetweenNotes;
+unsigned long newtime = millis();
+unsigned long oldtime;
+bool nexNote = true;
+int loopnex = 0;
+int loopnwe = 0;
+void resetvars()
+{
+  playing = true;
+  note = 0;
+  noteDuration;
+  pauseBetweenNotes;
+  newtime = millis();
+  oldtime;
+  nexNote = true;
+  loopnex = 0;
+  loopnwe = 0;
 }
 void playsong(int song[], int totalNotes)
 {
@@ -609,6 +607,7 @@ void printNumber(int number[], int size, bool state)
 }
 int numbers[][7] = {
     {SevenA, SevenB, SevenC, SevenD, SevenE, SevenF}, {SevenF, SevenE}, {SevenA, SevenB, SevenG, SevenE, SevenD}, {SevenA, SevenB, SevenG, SevenC, SevenD}, {SevenF, SevenG, SevenB, SevenC}, {SevenA, SevenF, SevenG, SevenC, SevenD}};
+int size;
 
 void setup()
 {
@@ -625,16 +624,18 @@ void setup()
   pinMode(SevenE, OUTPUT);
   pinMode(SevenF, OUTPUT);
   pinMode(SevenG, OUTPUT);
+          size = sizeof(numbers[songNum]) / sizeof(numbers[songNum][0]);
+
+        printNumber(numbers[songNum], size, true);
 
   // playsong(song1);
 }
 // unsigned long oldtime = millis();
 bool press = false;
-int size;
 void loop()
 { // read the input pin
   int ldrVal = analogRead(LDR);
-  Serial.println(ldrVal); // debug value
+  // Serial.println(ldrVal); // debug value
   if (ldrVal >= ldrTreshold)
   {
     digitalWrite(OFFLED, false);
@@ -642,47 +643,55 @@ void loop()
 
     // if ((oldtime - millis()) > 320)
     // {
-   //   
-          newtime = millis();
-    if (nexNote)
+    //
+    newtime = millis();
+    if (playing)
     {
-      if (songs[songNum][note + 1] > 0)
-      {
-        // Serial.println("calculation");
-        // Serial.println(song[note][1]);
-        noteDuration = wholenote / songs[songNum][note + 1];
-        // Serial.println(noteDuration);
-
-        pauseBetweenNotes = noteDuration * 0.9;
-      }
-      else
-      {
-        noteDuration = (wholenote) / abs(songs[songNum][note + 1]);
-        noteDuration *= 1.5;
-      }
-      tone(PezioDigital, songs[songNum][note], noteDuration);
-      nexNote = false;
-      loopnex++;
-    }
-    if (newtime - oldtime >= pauseBetweenNotes)
-    {
-      //   Serial.println(newtime - oldtime);
-      //   Serial.println(pauseBetweenNotes);
-      //   Serial.print("val");
-      stopSong();
-      oldtime = newtime;
-      note += 2;
-      nexNote = true;
-      if (note > songsize[songNum] * 2 || songs[songNum][note] == 338)
-      {
+      if (songNum == 0){
         playing = false;
       }
-      loopnwe++;
+      if (nexNote)
+      {
+        if (songs[songNum - 1][note + 1] > 0)
+        {
+          // Serial.println("calculation");
+          // Serial.println(song[note][1]);
+          noteDuration = wholenote / songs[songNum - 1][note + 1];
+          // Serial.println(noteDuration);
+
+          pauseBetweenNotes = noteDuration * 0.9;
+        }
+        else
+        {
+          noteDuration = (wholenote) / abs(songs[songNum - 1][note + 1]);
+          noteDuration *= 1.5;
+        }
+        tone(PezioDigital, songs[songNum - 1][note], noteDuration);
+        nexNote = false;
+        loopnex++;
+      }
+      if (newtime - oldtime >= pauseBetweenNotes)
+      {
+        //   Serial.println(newtime - oldtime);
+        //   Serial.println(pauseBetweenNotes);
+        //   Serial.print("val");
+        stopSong();
+        oldtime = newtime;
+        note += 2;
+        nexNote = true;
+        Serial.println(songs[songNum - 1][note]);
+        if (songs[songNum - 1][note] == 338)
+        {
+          playing = false;
+          nexNote = false;
+
+          stopSong();
+        }
+        loopnwe++;
+      }
     }
 
-
-// 
-
+    //
 
     if (!press)
     {

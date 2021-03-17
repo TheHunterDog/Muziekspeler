@@ -94,6 +94,7 @@
 #define NEXTSONGBUTT 12
 #define PREVSONGBUTT 11
 #define LDR A1
+#define POT A0
 #define OFFLED 9
 #define ONLED 10
 #define ldrTreshold 20
@@ -525,73 +526,6 @@ void resetvars()
   loopnex = 0;
   loopnwe = 0;
 }
-void playsong(int song[], int totalNotes)
-{
-  Serial.println(totalNotes);
-  bool playing = true;
-  int note = 0;
-  int noteDuration;
-  int pauseBetweenNotes;
-  unsigned long newtime = millis();
-  // unsigned long oldtime;
-  bool nexNote = true;
-  int loopnex = 0;
-  int loopnwe = 0;
-  while (playing)
-  {
-    delay(10); // tinkercad
-    newtime = millis();
-    if (nexNote)
-    {
-      if (song[note + 1] > 0)
-      {
-        // Serial.println("calculation");
-        // Serial.println(song[note][1]);
-        noteDuration = wholenote / song[note + 1];
-        // Serial.println(noteDuration);
-
-        pauseBetweenNotes = noteDuration * 0.9;
-      }
-      else
-      {
-        noteDuration = (wholenote) / abs(song[note + 1]);
-        noteDuration *= 1.5;
-      }
-      tone(PezioDigital, song[note], noteDuration);
-      nexNote = false;
-      loopnex++;
-    }
-    if (newtime - oldtime >= pauseBetweenNotes)
-    {
-      //   Serial.println(newtime - oldtime);
-      //   Serial.println(pauseBetweenNotes);
-      //   Serial.print("val");
-      stopSong();
-      oldtime = newtime;
-      note += 2;
-      nexNote = true;
-      Serial.println(totalNotes * 2);
-      Serial.println(note);
-      if (note > totalNotes * 2 || song[note] == 338)
-      {
-        playing = false;
-      }
-      loopnwe++;
-    }
-  }
-  // Serial.print("loopnwe:");
-  // Serial.println(loopnwe);
-  // Serial.print("loopnex:");
-  // Serial.println(loopnex);
-  // for (int thisNote = 0; thisNote < 8; thisNote++)
-  // {
-  //     int noteDuration = 1000 / song[thisNote][1];
-  //     tone(PezioDigital, song[thisNote][0], noteDuration);
-  //     int pauseBetweenNotes = noteDuration * 1.30;
-  //     delay(pauseBetweenNotes);
-  //     stopSong();
-  // }
-}
 void stopSong()
 {
   noTone(PezioDigital);
@@ -624,6 +558,7 @@ void setup()
   pinMode(SevenE, OUTPUT);
   pinMode(SevenF, OUTPUT);
   pinMode(SevenG, OUTPUT);
+  pinMode(POT, INPUT);
           size = sizeof(numbers[songNum]) / sizeof(numbers[songNum][0]);
 
         printNumber(numbers[songNum], size, true);
@@ -634,6 +569,11 @@ void setup()
 bool press = false;
 void loop()
 { // read the input pin
+tempo = analogRead(POT);
+if (tempo < 160){
+  tempo = 160;
+}
+wholenote = (60000 * 4) / tempo;
   int ldrVal = analogRead(LDR);
   // Serial.println(ldrVal); // debug value
   if (ldrVal >= ldrTreshold)

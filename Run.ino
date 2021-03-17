@@ -512,7 +512,7 @@ int wholenote = (60000 * 4) / tempo;
 bool playing = true;
 int note = 0;
 int noteDuration;
-int pauseBetweenNotes;
+unsigned int pauseBetweenNotes;
 unsigned long newtime = millis();
 unsigned long oldtime;
 bool nexNote = true;
@@ -523,8 +523,6 @@ void resetvars()
 {
   playing = true;
   note = 0;
-  noteDuration;
-  pauseBetweenNotes;
   newtime = millis();
   nexNote = true;
 }

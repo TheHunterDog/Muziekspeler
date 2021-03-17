@@ -517,6 +517,7 @@ unsigned long newtime = millis();
 unsigned long oldtime;
 bool nexNote = true;
 bool press = false;
+int size;
 
 void resetvars()
 {
@@ -545,7 +546,6 @@ int numbers[][7] = {
     {SevenF, SevenG, SevenB, SevenC},                 // 4,
     {SevenA, SevenF, SevenG, SevenC, SevenD},         //5
 };
-int size;
 
 void setup()
 {
